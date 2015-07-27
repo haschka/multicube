@@ -1,0 +1,97 @@
+
+*------------------------------------------------------------------------------------*
+* This are some general guidelines on how to get multicube running on your machine.  *
+*------------------------------------------------------------------------------------*
+
+Multicube has only been extensively tested on Nvidia's and Apple's OpenCL
+implementation, in double precision.
+
+By default the code presented runs on GPUs, if you want to run this code on a 
+CPU you may search and replace in the multicube.c file the word 
+    CL_DEVICE_TYPE_GPU 
+with 
+    CL_DEVICE_TYPE_CPU 
+
+To compile this code you should write something like:
+(for large molecules and in general double precision is prefered)
+on Linux:
+
+gcc -O2 multicube.c -o multicube -lm -lOpenCL -D_DDOUBLE
+
+on Mac OS X: 
+
+gcc -O2 -framework OpenCL multicube.c -o multicube -D_DDOUBLE
+
+For small molecules and if you want to test this on a gpu without double
+precision support you may omit -D_DDOUBLE from the above. 
+
+Instructions how to use this will automatically appear if you run multicube
+without any parameters. 
+
+Running Multicube make sure that in the folder from
+where you start this program you have the spot.cl and dpot.cl file stored.
+
+*------------------------------------------------------------------------------------*
+*      Example and parameters meaning                                                *
+*------------------------------------------------------------------------------------*
+
+A test-set for the alanine molecule is provided with this program.
+The testset can be run using the following command:
+
+./multicube ala.charge ala.vdw charges-out 1 1 1. 0.0000001 0.00000001 100000 ala.chk.fchk.80.cube
+
+For a starting point:
+
+./multicube yourinital-charges yourvdw-radii charges-output 1 1 1. 0.0000001 0.00000001 100000 your-cube-files-containing-the-potential
+
+should yield good values for double precision calculations.
+
+
+Argument list:
+-------------
+
+1. string = /path/to/chargesfile 
+2. string = /path/to/vdw_database 
+3. string = /path/to/minimized_charges_output 
+4  int    = Number of GPUs you have... >1000 is cool! 
+5. char   = Norm to use 1: L1 2: L2 3: weighted L1 4: weighted L2
+6. real   = Initial stepsize ~1 should be fine otherwise use thumbs devided by Pi
+                                          f(x+h)-f(x-h)
+7. real   = h used in numerical gradient : -------------
+                                               2*h     
+                     should be around sqrtf(machine_epsilon)
+                     machine_epsilon= for 64bit doubles ~1.11e-16
+                                      for 32bit floats  ~5.96e-08
+8. real   = convergence criterium: 
+             calculation stops if: 
+             displacement_vector_length < convergence criterium
+9. int    = maximum number of steps to evaluate
+10. multiple stings = /paths/to/cubes/
+
+
+Specific parameters:
+-------------------
+yourinital-charges-file:
+The number of lines in your initial charge file has to correspond to the number
+of atoms in your cube files. Each line should contain a three letter code 
+describing the atomtype followed by the initial guess charge. Atoms containing
+the same three letter code are automatically treated to be of the same type and 
+will have the same charge in charges-output. The file shall not end on a new
+line as this currently crashes the program.
+
+yourvdw-radii:
+In this file you have to define the vdw radii for all your atomtypes used in
+the yourinitial-charges-file. Each line should contain a three letter code 
+defining the atomtype followed by the vdw radius for this atom type. The file
+shall not end on a new line as this currently crashes the program.
+
+
+*------------------------------------------------------------------------------------*
+*      Changing of metrics                                                           *
+*------------------------------------------------------------------------------------*
+
+Our algorithm is not limited to those implemented and
+different metrics can be used in simply changing the functions defined
+in the OpenCL kernel functions in the files spot.cl and
+dpot.cl supplied with the source code. This is as simple as
+changing lines 68 and 70 in dpot.cl. 
