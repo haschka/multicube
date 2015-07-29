@@ -1,11 +1,14 @@
 
 *------------------------------------------------------------------------------*
-* This are some general guidelines on how to get multicube running on
+* These are some general guidelines on how to get multicube running on
 * your machine.  
 *------------------------------------------------------------------------------*
 
-Multicube has only been extensively tested on Nvidia's and Apple's OpenCL
-implementation, in double precision.
+Multicube has been exhaustively tested on Nvidia's and Apple's OpenCL
+implementation, in double precision. Other OpenCL platforms may work but you
+might proceed with caution. 
+
+GPU/CPU:
 
 By default the code presented runs on GPUs, if you want to run this code on a 
 CPU you may search and replace in the multicube.c file the word 
@@ -13,8 +16,10 @@ CPU you may search and replace in the multicube.c file the word
 with 
     CL_DEVICE_TYPE_CPU 
 
+COMPILATION:
+
 To compile this code you should write something like:
-(for large molecules and in general double precision is prefered)
+(for large molecules and in general double precision is preferred)
 on Linux:
 
 gcc -O2 multicube.c -o multicube -lm -lOpenCL -D_DDOUBLE
@@ -36,7 +41,7 @@ where you start this program you have the spot.cl and dpot.cl file stored.
 *      Example and parameters meaning                                          *
 *------------------------------------------------------------------------------*
 
-A test-set for the alanine molecule is provided with this program.
+A test-set for prussic acid (HCN) is provided with this program.
 The testset can be run using the following command:
 
 ./multicube HCN.charge HCN.vdw charges-out 1 1 1. 0.0000001 0.00000001 100000 HCN.chk.fchk.80.cube
@@ -46,7 +51,6 @@ For a starting point:
 ./multicube yourinital-charges yourvdw-radii charges-output 1 1 1. 0.0000001 0.00000001 100000 your-cube-files-containing-the-potential
 
 should yield good values for double precision calculations.
-
 
 Argument list:
 -------------
@@ -72,8 +76,8 @@ Argument list:
     	     	      as cube files)
 
 
-Specific parameters:
--------------------
+Parameter Files:
+--------------------
 yourinital-charges-file:
 The number of lines in your initial charge file has to correspond to the number
 of atoms in your cube files. Each line should contain a three letter code 
@@ -90,7 +94,7 @@ shall not end on a new line as this currently crashes the program.
 
 
 *-----------------------------------------------------------------------------*
-*      Changing of metrics                                                    *
+*    metrics changement	                                                      *
 *-----------------------------------------------------------------------------*
 
 Our algorithm is not limited to those implemented and
