@@ -1,3 +1,10 @@
+This is MULTICUBE charges fitting program which allows to derive charges
+under different norms.
+
+If you use this for research purposes PLEASE CITE:
+Direct minimization: Alternative to the traditional L2 norm to derive
+partial atomic charges: J. Comp. Theo. Chem. 1074 (2015) pp. 50-57
+http://dx.doi.org/10.1016/j.comptc.2015.10.008
 
 *------------------------------------------------------------------------------*
 * These are some general guidelines on how to get multicube running on
