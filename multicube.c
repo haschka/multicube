@@ -1,7 +1,7 @@
 #include<stdio.h> 
 #include<stdlib.h>
 #include<string.h>
-#include<sys/sysctl.h>
+// #include<sys/sysctl.h>
 #include<sys/stat.h>
 #include<signal.h>
 #include<math.h>
