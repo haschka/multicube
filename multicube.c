@@ -231,19 +231,23 @@ opencl_stuff opencl_initialization(atom_database base, cube_def* cubes,
     if (err == CL_INVALID_DEVICE) {
       printf("First Device Failed, trying 2nd");
       contexts[0] = clCreateContext(contprop, 1, devices+1, NULL, NULL, &err);
-      cmdq[0] = clCreateCommandQueue(contexts[0], devices[1], 0, NULL);
+      cmdq[0] = clCreateCommandQueueWithProperties(contexts[0],
+						   devices[1], 0, NULL);
     } else {
-      cmdq[0] = clCreateCommandQueue(contexts[0], devices[0], 0, NULL);
+      cmdq[0] = clCreateCommandQueueWithProperties(contexts[0],
+						   devices[0], 0, NULL);
     }
   }
   if (num_gpus == 2) {
     for(i=0;i<num_gpus;i++) {
-      cmdq[i] = clCreateCommandQueue(contexts[i], devices[i], 0, NULL); 
+      cmdq[i] = clCreateCommandQueueWithProperties(contexts[i],
+						   devices[i], 0, NULL); 
     }
   }
 #else 
   for(i=0;i<num_gpus;i++) {
-    cmdq[i] = clCreateCommandQueue(contexts[i], devices[i], 0, NULL); 
+    cmdq[i] = clCreateCommandQueueWithProperties(contexts[i],
+						 devices[i], 0, NULL); 
   }
 #endif
 
